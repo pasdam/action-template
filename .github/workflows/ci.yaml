@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.6
+        with:
+          submodules: recursive
+
+      - name: Install actionlint
+        run: |
+          bash <(curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          sudo mv actionlint /usr/local/bin/actionlint
+
+      - name: Lint action and workflows with actionlint
+        run: actionlint
+
+      - name: Install yamllint
+        run: pip install --quiet yamllint
+
+      - name: Check YAML format
+        run: yamllint --config-file .yamllint.yml action.yml .github/workflows/
+
+      - name: Lint shell scripts with ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: scripts
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.6
+        with:
+          submodules: recursive
+
+      - name: Run bats tests
+        run: ./tests/libs/bats-core/bin/bats --tap tests/
+
+      - name: Integration - info message
+        uses: ./
+        with:
+          message: Hello from the integration test!
+
+      - name: Integration - warning message
+        uses: ./
+        with:
+          message: This is a warning.
+          level: warning
+
+      - name: Integration - error message
+        uses: ./
+        with:
+          message: This is an error.
+          level: error

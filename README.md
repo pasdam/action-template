@@ -33,3 +33,40 @@ so they surface as annotations in the Actions UI.
     message: Required secret is not set.
     level: error
 ```
+
+## Development
+
+### Prerequisites
+
+- [actionlint](https://github.com/rhysd/actionlint)
+- [yamllint](https://yamllint.readthedocs.io/)
+- [ShellCheck](https://www.shellcheck.net/)
+
+### Run tests locally
+
+```bash
+git submodule update --init --recursive
+./tests/libs/bats-core/bin/bats tests/
+```
+
+### Lint locally
+
+```bash
+# Action and workflow YAML
+actionlint
+
+# YAML formatting
+yamllint --config-file .yamllint.yml action.yml .github/workflows/
+
+# Shell scripts
+shellcheck scripts/*.sh
+```
+
+## CI
+
+Every push and pull request runs two jobs:
+
+- **Lint** — `actionlint` on workflow files and `action.yml`, `yamllint` for YAML format, and
+  `shellcheck` on all shell scripts under `scripts/`.
+- **Test** — [bats-core](https://github.com/bats-core/bats-core) unit tests (`tests/log.bats`)
+  followed by integration steps that run the action itself at each log level.
