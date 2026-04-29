@@ -5,10 +5,10 @@ description: Logs a message to the workflow run output.
 inputs:
   message:
     description: The message to log.
-    required: "true"
+    required: true
   level:
     description: "Log level: info, warning, or error."
-    required: "false"
+    required: false
     default: info
 
 runs:
@@ -16,13 +16,4 @@ runs:
   steps:
     - name: Log
       shell: bash
-      run: |
-        case "${{ inputs.level }}" in
-          info)    echo "${{ inputs.message }}" ;;
-          warning) echo "::warning::${{ inputs.message }}" ;;
-          error)   echo "::error::${{ inputs.message }}" ;;
-          *)
-            echo "::error::Unknown log level '${{ inputs.level }}'. Must be one of: info, warning, error." >&2
-            exit 1
-            ;;
-        esac
+      run: ${{ github.action_path }}/scripts/log.sh "${{ inputs.message }}" "${{ inputs.level }}"
