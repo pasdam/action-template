@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
-        with:
-          submodules: recursive
 
       - name: Install actionlint
         run: |
@@ -31,22 +29,27 @@ jobs:
       - name: Check YAML format
         run: yamllint --config-file .yamllint.yml action.yml .github/workflows/
 
-      - name: Lint shell scripts with ShellCheck
-        uses: ludeeus/action-shellcheck@2.0.0
-        with:
-          scandir: scripts
-
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
-        with:
-          submodules: recursive
 
-      - name: Run bats tests
-        run: ./tests/libs/bats-core/bin/bats --tap tests/
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Unit tests
+        run: npm test
 
       - name: Integration - info message
         uses: ./

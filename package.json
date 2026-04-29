@@ -1,0 +1,41 @@
+{
+  "name": "action-template",
+  "version": "1.0.0",
+  "description": "A reusable GitHub Actions composite action that logs a message to the workflow run output.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/**/*.test.ts"],
+    "transform": {
+      "^.+\\.ts$": ["ts-jest", {"tsconfig": "tsconfig.test.json"}]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pasdam/action-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pasdam/action-template/issues"
+  },
+  "homepage": "https://github.com/pasdam/action-template#readme",
+  "dependencies": {
+    "@actions/core": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.6.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "typescript": "^6.0.3"
+  }
+}

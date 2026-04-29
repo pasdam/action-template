@@ -12,8 +12,5 @@ inputs:
     default: info
 
 runs:
-  using: composite
-  steps:
-    - name: Log
-      shell: bash
-      run: ${{ github.action_path }}/scripts/log.sh "${{ inputs.message }}" "${{ inputs.level }}"
+  using: node20
+  main: dist/index.js
