@@ -1,13 +1,14 @@
+---
 name: Log Message
 description: Logs a message to the workflow run output.
 
 inputs:
   message:
     description: The message to log.
-    required: true
+    required: "true"
   level:
     description: "Log level: info, warning, or error."
-    required: false
+    required: "false"
     default: info
 
 runs:
